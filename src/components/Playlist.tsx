@@ -1,5 +1,6 @@
 import { Howl } from 'howler'
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { PlaybackContext } from '../contexts/PlaybackContext'
 import { getSongs } from '../services'
 import { PlaybackState, Song } from '../types'
@@ -83,13 +84,19 @@ function Playlist() {
         setState: setPlaybackState,
       }}
     >
-      <ul>
+      <Container>
         {songs.map((song) => (
           <Track key={song.id} song={song} />
         ))}
-      </ul>
+      </Container>
     </PlaybackContext.Provider>
   )
 }
+
+const Container = styled.ul`
+  width: 100%;
+  padding: 0;
+  background-color: #242933;
+`
 
 export default Playlist
