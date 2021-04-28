@@ -1,5 +1,7 @@
 import { Song } from './types'
 
+const baseUrl = 'https://api-stg.jam-community.com'
+
 async function api<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init)
   if (!response.ok) {
@@ -10,16 +12,14 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export async function getSongs(): Promise<Song[]> {
-  const songs = await api<Song[]>(
-    'https://api-stg.jam-community.com/song/trending'
-  )
+  const songs = await api<Song[]>(`${baseUrl}/song/trending`)
 
   return songs
 }
 
 export async function likeSong(id: string) {
   await api(
-    `https://api-stg.jam-community.com/interact/like?apikey=${process.env.REACT_APP_API_KEY}`,
+    `${baseUrl}/interact/like?apikey=${process.env.REACT_APP_API_KEY}`,
     {
       method: 'POST',
       headers: {
