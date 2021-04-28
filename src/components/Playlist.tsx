@@ -1,4 +1,4 @@
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PlaybackContext } from '../contexts/PlaybackContext'
@@ -48,7 +48,7 @@ function Playlist() {
       }
     } else {
       if (playbackState === PlaybackState.PLAYING) {
-        sound.unload()
+        Howler.unload()
       }
 
       loadingTimeoutId = (setTimeout(() => {
