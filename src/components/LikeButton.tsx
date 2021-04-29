@@ -28,7 +28,14 @@ function LikeButton(props: Props) {
     }
   }
 
-  return <Icon src={heart} onClick={handleLikeClick} $isActive={isLiked} />
+  return (
+    <Icon
+      src={heart}
+      onClick={handleLikeClick}
+      $isActive={isLiked}
+      alt="heart icon"
+    />
+  )
 }
 
 const heartBeatAnimation = keyframes`
