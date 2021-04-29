@@ -23,6 +23,7 @@ function PlaybackButton(props: Props) {
   return (
     <Container
       onClick={() => togglePlayback(props.song)}
+      onTouchStart={(e) => e.stopPropagation()}
       role="button"
       $isLoading={isLoading}
     >

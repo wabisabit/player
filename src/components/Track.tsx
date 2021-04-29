@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { PlaybackContext } from '../contexts/PlaybackContext'
 import { Song } from '../types'
 import LikeButton from './LikeButton'
 import PlaybackButton from './PlaybackButton'
@@ -14,9 +15,10 @@ type Props = {
 
 function Track(props: Props) {
   const { id, name, cover_image_path } = props.song
+  const { togglePlayback } = useContext(PlaybackContext)
 
   return (
-    <TrackContainer>
+    <TrackContainer onTouchStart={() => togglePlayback(props.song)}>
       <Wrapper>
         <ThumbnailContainer>
           <Thumbnail src={cover_image_path} alt={`cover art for the song `} />

@@ -30,7 +30,7 @@ function LikeButton(props: Props) {
   }
 
   return (
-    <button onClick={handleLikeClick}>
+    <button onClick={handleLikeClick} onTouchStart={(e) => e.stopPropagation()}>
       <Icon src={heart} $isActive={isLiked} alt="heart icon" role="button" />
     </button>
   )
