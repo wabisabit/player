@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import Notification from './components/Notification'
 import Playlist from './components/Playlist'
+import { NotificationContext } from './contexts/NotificationContext'
 
 function App() {
+  const [notification, setNotification] = useState('')
+
   return (
-    <Container>
-      <Playlist />
-    </Container>
+    <NotificationContext.Provider value={{ notification, setNotification }}>
+      <Container>
+        <Playlist />
+        <Notification />
+      </Container>
+    </NotificationContext.Provider>
   )
 }
 
