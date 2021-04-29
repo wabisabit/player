@@ -35,6 +35,13 @@ function Playlist() {
     }
   }, [])
 
+  const rewindNearEnd = () => {
+    const remainingTime = sound.duration() - (sound.seek() as number)
+    if (remainingTime < 1) {
+      sound.seek(0)
+    }
+  }
+
   const togglePlayback = (song: Song) => {
     const isCurrent = currentSong?.id === song.id
 
@@ -44,8 +51,8 @@ function Playlist() {
         sound.pause()
       } else {
         setPlaybackState(PlaybackState.PLAYING)
+        rewindNearEnd()
         sound.play()
-        // TODO go to start if less than a second left
       }
     } else {
       if (playbackState === PlaybackState.PLAYING) {
