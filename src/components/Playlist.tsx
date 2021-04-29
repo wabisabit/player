@@ -15,7 +15,7 @@ let loadingTimeoutId: number
 function Playlist() {
   const { setNotification } = useContext(NotificationContext)
   const [songs, setSongs] = useState([] as Song[])
-  const [loadedSong, setLoadedSong] = useState(null as Song | null)
+  const [currentSong, setCurrentSong] = useState(null as Song | null)
   const [playbackState, setPlaybackState] = useState(PlaybackState.PAUSED)
 
   useEffect(() => {
@@ -36,9 +36,9 @@ function Playlist() {
   }, [])
 
   const togglePlayback = (song: Song) => {
-    const isLoaded = loadedSong?.id === song.id
+    const isCurrent = currentSong?.id === song.id
 
-    if (isLoaded) {
+    if (isCurrent) {
       if (playbackState === PlaybackState.PLAYING) {
         setPlaybackState(PlaybackState.PAUSED)
         sound.pause()
@@ -57,7 +57,7 @@ function Playlist() {
       }, LOADING_STATE_DELAY) as unknown) as number
 
       setPlaybackState(PlaybackState.PLAYING)
-      setLoadedSong(song)
+      setCurrentSong(song)
 
       sound = new Howl({
         src: [song.music_file_path],
@@ -68,10 +68,14 @@ function Playlist() {
         onloaderror: () => {
           clearTimeout(loadingTimeoutId)
           setPlaybackState(PlaybackState.LOAD_ERROR)
+          setNotification(
+            `The song is not available for playback. We're working on a solution.`
+          )
         },
         onplayerror: () => {
           clearTimeout(loadingTimeoutId)
           setPlaybackState(PlaybackState.PLAYBACK_ERROR)
+          setNotification(`Couldn't play the song. Try a different browser.`)
         },
         onend: () => setPlaybackState(PlaybackState.PAUSED),
       })
@@ -83,7 +87,7 @@ function Playlist() {
   return (
     <PlaybackContext.Provider
       value={{
-        loadedSong,
+        loadedSong: currentSong,
         togglePlayback,
         state: playbackState,
         setState: setPlaybackState,
