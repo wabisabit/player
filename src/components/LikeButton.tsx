@@ -24,7 +24,8 @@ function LikeButton(props: Props) {
       notificationContext.setNotification(
         `There was a problem liking that song. We're working on a fix.`
       )
-      setIsLiked(false)
+      // I commented this out so that you can see the full animation, since the api call always fails
+      // setIsLiked(false)
     }
   }
 
@@ -43,13 +44,13 @@ const heartBeatAnimation = keyframes`
     transform: scale(1) translateY(-2px)
   }
   20% {
-    transform: scale(${HEART_BEAT_RATIO}) 
+    transform: scale(${HEART_BEAT_RATIO}) translateY(-3px)
   }
   30% {
-    transform: scale(1)
+    transform: scale(1) translateY(-2px)
   }
   40% {
-    transform: scale(${HEART_BEAT_RATIO}) translateY(-1px)
+    transform: scale(${HEART_BEAT_RATIO}) translateY(-2px)
   }
   100% {
     transform: scale(1) translateY(0)
@@ -61,17 +62,19 @@ const Icon = styled.img<{ $isActive: boolean }>`
   height: ${ICON_SIZE}px;
   opacity: ${(props) => (props.$isActive ? 1 : 0.5)};
   padding: 10px;
+  padding-left: 2em;
   cursor: pointer;
   &:hover {
     opacity: ${(props) => (props.$isActive ? 0.9 : 0.6)};
     transform: scale(${(props) => (props.$isActive ? 1 : HEART_BEAT_RATIO)});
   }
   transition: all 0.2s ease-in;
+  transform-origin: 65% 50%;
   ${(props) =>
     props.$isActive &&
     css`
       animation-name: ${heartBeatAnimation};
-      animation-duration: 1s;
+      animation-duration: 1.5s;
       animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
       animation-iteration-count: 1;
     `}
