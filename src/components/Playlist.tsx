@@ -63,9 +63,13 @@ function Playlist() {
           clearTimeout(loadingTimeoutId)
           setPlaybackState(PlaybackState.PLAYING)
         },
+        onloaderror: () => {
+          clearTimeout(loadingTimeoutId)
+          setPlaybackState(PlaybackState.LOAD_ERROR)
+        },
         onplayerror: () => {
           clearTimeout(loadingTimeoutId)
-          setPlaybackState(PlaybackState.ERROR)
+          setPlaybackState(PlaybackState.PLAYBACK_ERROR)
         },
         onend: () => setPlaybackState(PlaybackState.PAUSED),
       })

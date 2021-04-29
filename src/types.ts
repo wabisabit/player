@@ -9,7 +9,8 @@ export type Song = {
 
 export enum PlaybackState {
   LOADING = 'LOADING',
-  ERROR = 'ERROR',
+  PLAYBACK_ERROR = 'PLAYBACK_ERROR',
+  LOAD_ERROR = 'LOAD_ERROR',
   PAUSED = 'PAUSED',
   PLAYING = 'PLAYING',
 }
