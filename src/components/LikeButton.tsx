@@ -13,13 +13,12 @@ function LikeButton(props: Props) {
   const { id } = props
   const [isLiked, setIsLiked] = useState(false)
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
     try {
-      likeSong(id)
       setIsLiked(true)
+      await likeSong(id)
     } catch (err) {
       // TODO show error
-      // TODO report error
     }
   }
 

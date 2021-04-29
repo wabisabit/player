@@ -18,16 +18,21 @@ export async function getSongs(): Promise<Song[]> {
 }
 
 export async function likeSong(id: string) {
-  await api(
-    `${baseUrl}/interact/like?apikey=${process.env.REACT_APP_API_KEY}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({
-        id,
-      }),
-    }
-  )
+  try {
+    await api(
+      `${baseUrl}/interact/like?apikey=${process.env.REACT_APP_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      }
+    )
+  } catch (err) {
+    // TODO Report error
+    throw new Error(`Song not likeable`)
+  }
 }
