@@ -42,52 +42,82 @@ function Playlist() {
     }
   }
 
+  const loadSong = (path: string) => {
+    sound = new Howl({
+      src: [path],
+      onplay: () => {
+        clearTimeout(loadingTimeoutId)
+        setPlaybackState(PlaybackState.PLAYING)
+      },
+      onloaderror: (id, message) => {
+        if (message === 'Decoding audio data failed.') {
+          return // This is a false load error caused by howler.js
+        }
+        clearTimeout(loadingTimeoutId)
+        setPlaybackState(PlaybackState.PAUSED)
+        setNotification(
+          `The song is not available for playback. We're working on a solution.`
+        )
+      },
+      onplayerror: () => {
+        clearTimeout(loadingTimeoutId)
+        setPlaybackState(PlaybackState.PAUSED)
+        setNotification(`Couldn't play the song. Try a different browser.`)
+      },
+      onend: () => setPlaybackState(PlaybackState.PAUSED),
+    })
+  }
+
+  const toggleCurrentSongPlayback = () => {
+    if (playbackState === PlaybackState.LOADING) {
+      setPlaybackState(PlaybackState.PAUSED)
+      sound.stop()
+    } else if (playbackState === PlaybackState.PLAYING) {
+      clearTimeout(loadingTimeoutId)
+      setPlaybackState(PlaybackState.PAUSED)
+      sound.pause()
+    } else {
+      setPlaybackState(PlaybackState.PLAYING)
+      rewindNearEnd()
+      sound.play()
+    }
+  }
+
+  const playDifferentSong = (song: Song) => {
+    if (
+      playbackState === PlaybackState.PLAYING ||
+      playbackState === PlaybackState.LOADING
+    ) {
+      Howler.unload()
+    }
+
+    loadingTimeoutId = (setTimeout(() => {
+      setPlaybackState(PlaybackState.LOADING)
+    }, LOADING_STATE_DELAY) as unknown) as number
+
+    setPlaybackState(PlaybackState.PLAYING)
+    setCurrentSong(song)
+
+    loadSong(song.music_file_path)
+
+    sound.play()
+  }
+
   const togglePlayback = (song: Song) => {
+    clearTimeout(loadingTimeoutId)
     const isCurrent = currentSong?.id === song.id
 
-    if (isCurrent) {
-      if (playbackState === PlaybackState.PLAYING) {
-        setPlaybackState(PlaybackState.PAUSED)
-        sound.pause()
+    try {
+      if (isCurrent) {
+        toggleCurrentSongPlayback()
       } else {
-        setPlaybackState(PlaybackState.PLAYING)
-        rewindNearEnd()
-        sound.play()
+        playDifferentSong(song)
       }
-    } else {
-      if (playbackState === PlaybackState.PLAYING) {
-        Howler.unload()
-      }
-
-      loadingTimeoutId = (setTimeout(() => {
-        setPlaybackState(PlaybackState.LOADING)
-      }, LOADING_STATE_DELAY) as unknown) as number
-
-      setPlaybackState(PlaybackState.PLAYING)
-      setCurrentSong(song)
-
-      sound = new Howl({
-        src: [song.music_file_path],
-        onplay: () => {
-          clearTimeout(loadingTimeoutId)
-          setPlaybackState(PlaybackState.PLAYING)
-        },
-        onloaderror: () => {
-          clearTimeout(loadingTimeoutId)
-          setPlaybackState(PlaybackState.LOAD_ERROR)
-          setNotification(
-            `The song is not available for playback. We're working on a solution.`
-          )
-        },
-        onplayerror: () => {
-          clearTimeout(loadingTimeoutId)
-          setPlaybackState(PlaybackState.PLAYBACK_ERROR)
-          setNotification(`Couldn't play the song. Try a different browser.`)
-        },
-        onend: () => setPlaybackState(PlaybackState.PAUSED),
-      })
-
-      sound.play()
+    } catch (err) {
+      // TODO Report error
+      setNotification(
+        `There was a problem playing the song. We're working on a solution`
+      )
     }
   }
 
