@@ -29,12 +29,9 @@ function LikeButton(props: Props) {
   }
 
   return (
-    <Icon
-      src={heart}
-      onClick={handleLikeClick}
-      $isActive={isLiked}
-      alt="heart icon"
-    />
+    <button onClick={handleLikeClick}>
+      <Icon src={heart} $isActive={isLiked} alt="heart icon" role="button" />
+    </button>
   )
 }
 

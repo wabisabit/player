@@ -23,6 +23,7 @@ function PlaybackButton(props: Props) {
   return (
     <Container
       onClick={() => togglePlayback(props.song)}
+      role="button"
       $isLoading={isLoading}
     >
       {isPlaying || isLoading ? (
@@ -46,7 +47,7 @@ const loadingAnimation = keyframes`
   }
 `
 
-const Container = styled.div<{ $isLoading: boolean }>`
+const Container = styled.button<{ $isLoading: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
