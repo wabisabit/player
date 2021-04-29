@@ -6,6 +6,7 @@ import PlaybackButton from './PlaybackButton'
 import { TrackContainer } from './Track.style'
 
 const THUMBNAIL_SIZE = 100
+const THUMBNAIL_SIZE_S = 70
 
 type Props = {
   song: Song
@@ -41,17 +42,30 @@ const Wrapper = styled.div`
 const Name = styled.span`
   font-size: ${22 / 16}rem;
   flex-grow: 1;
+  @media screen and (max-width: 500px) {
+    font-size: ${18 / 16}rem;
+  }
 `
 
 const ThumbnailContainer = styled.div`
   position: relative;
   margin-right: 3em;
+  @media screen and (max-width: 1100px) {
+    margin-right: 2em;
+  }
+  @media screen and (max-width: 500px) {
+    margin-right: 1em;
+  }
 `
 
 const Thumbnail = styled.img`
   border-radius: 3px;
   width: ${THUMBNAIL_SIZE}px;
   height: ${THUMBNAIL_SIZE}px;
+  @media screen and (max-width: 500px) {
+    width: ${THUMBNAIL_SIZE_S}px;
+    height: ${THUMBNAIL_SIZE_S}px;
+  }
 `
 
 export default Track
