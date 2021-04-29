@@ -45,7 +45,7 @@ const Name = styled.span`
 
 const ThumbnailContainer = styled.div`
   position: relative;
-  margin-right: 2em;
+  margin-right: 3em;
 `
 
 const Thumbnail = styled.img`
