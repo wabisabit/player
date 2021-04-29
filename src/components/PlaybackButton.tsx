@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import pause from '../assets/pause.svg'
 import play from '../assets/play.svg'
 import { PlaybackContext } from '../contexts/PlaybackContext'
 import { PlaybackState, Song } from '../types'
-import { TrackContainer } from './Track.style'
+import { TrackContainer, trackHoverTransitionMixin } from './Track.style'
 
 const ICON_SIZE = 50
 
@@ -16,12 +16,17 @@ function PlaybackButton(props: Props) {
   const { id } = props.song
   const { togglePlayback, state, loadedSong } = useContext(PlaybackContext)
 
-  const isPlaying = id === loadedSong?.id && state === PlaybackState.PLAYING
+  const isLoadedSong = id === loadedSong?.id
+  const isPlaying = isLoadedSong && state === PlaybackState.PLAYING
+  const isLoading = isLoadedSong && state === PlaybackState.LOADING
 
   return (
-    <Container onClick={() => togglePlayback(props.song)}>
-      {isPlaying ? (
-        <Icon src={pause} alt="pause" />
+    <Container
+      onClick={() => togglePlayback(props.song)}
+      $isLoading={isLoading}
+    >
+      {isPlaying || isLoading ? (
+        <PauseIcon src={pause} alt="pause" />
       ) : (
         <PlayIcon src={play} alt="play" />
       )}
@@ -29,7 +34,19 @@ function PlaybackButton(props: Props) {
   )
 }
 
-const Container = styled.div`
+const loadingAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  0% {
+    opacity: 1;
+  }
+`
+
+const Container = styled.div<{ $isLoading: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -39,15 +56,23 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  ${(props) =>
+    props.$isLoading &&
+    css`
+      animation-name: ${loadingAnimation};
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    `}
 `
 
-const Icon = styled.img`
+const PauseIcon = styled.img`
   width: ${ICON_SIZE}px;
   height: ${ICON_SIZE}px;
-  transition: opacity 0.2s ease-in-out;
+  ${trackHoverTransitionMixin}
+  transition-property: opacity;
 `
 
-const PlayIcon = styled(Icon)`
+const PlayIcon = styled(PauseIcon)`
   opacity: 0;
   ${TrackContainer}:hover & {
     opacity: 1;
