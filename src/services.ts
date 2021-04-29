@@ -12,9 +12,14 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export async function getSongs(): Promise<Song[]> {
-  const songs = await api<Song[]>(`${baseUrl}/song/trending`)
+  try {
+    const songs = await api<Song[]>(`${baseUrl}/song/trending`)
 
-  return songs
+    return songs
+  } catch (err) {
+    // TODO Report error
+    throw new Error(`Couldn't fetch song list`)
+  }
 }
 
 export async function likeSong(id: string) {

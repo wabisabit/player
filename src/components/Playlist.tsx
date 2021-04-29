@@ -23,7 +23,6 @@ function Playlist() {
         setSongs(fetchedSongs)
       } catch (err) {
         // TODO show error
-        // TODO report error
       }
     })()
   }, [])
