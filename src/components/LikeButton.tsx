@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import heart from '../assets/heart.svg'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { likeSong } from '../services'
 
 const ICON_SIZE = 30
@@ -13,13 +14,17 @@ type Props = {
 function LikeButton(props: Props) {
   const { id } = props
   const [isLiked, setIsLiked] = useState(false)
+  const notificationContext = useContext(NotificationContext)
 
   const handleLikeClick = async () => {
+    setIsLiked(true)
     try {
-      setIsLiked(true)
       await likeSong(id)
     } catch (err) {
-      // TODO show error
+      notificationContext.setNotification(
+        `There was a problem liking that song. We're working on a fix.`
+      )
+      setIsLiked(false)
     }
   }
 
