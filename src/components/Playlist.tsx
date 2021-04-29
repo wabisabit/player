@@ -1,6 +1,7 @@
 import { Howl, Howler } from 'howler'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { PlaybackContext } from '../contexts/PlaybackContext'
 import { getSongs } from '../services'
 import { PlaybackState, Song } from '../types'
@@ -12,6 +13,7 @@ let sound: Howl
 let loadingTimeoutId: number
 
 function Playlist() {
+  const { setNotification } = useContext(NotificationContext)
   const [songs, setSongs] = useState([] as Song[])
   const [loadedSong, setLoadedSong] = useState(null as Song | null)
   const [playbackState, setPlaybackState] = useState(PlaybackState.PAUSED)
@@ -22,10 +24,10 @@ function Playlist() {
         const fetchedSongs = await getSongs()
         setSongs(fetchedSongs)
       } catch (err) {
-        // TODO show error
+        setNotification(`Couldn't load song list. We're working on a solution.`)
       }
     })()
-  }, [])
+  }, [setNotification])
 
   useEffect(() => {
     return () => {
