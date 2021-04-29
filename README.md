@@ -1,3 +1,12 @@
+Before running, add .env file with REACT_APP_API_KEY={key}
+
+This app asumes the target browsers have the Fetch API as it doesn't polyfill it.
+It also assumes it's not going to be translated.
+
+If the app was expected to scale, I would use a theme including colors and other values in Styled Components and also Storybook to develop and test components.
+
+The heart buttons stay active even if the API call fails in order to show the full animation. I wouldn't leave it like this for production, although it would depend on the actual meaning of the like button and other unknown usage details. (See line 28 in LikeButton)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
