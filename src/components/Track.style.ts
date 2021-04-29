@@ -5,7 +5,7 @@ export const trackHoverTransitionMixin = css`
   transition-timing-function: ease-in;
 `
 
-export const TrackContainer = styled.div`
+export const TrackContainer = styled.li`
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #15181e;

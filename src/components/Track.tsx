@@ -28,7 +28,7 @@ function Track(props: Props) {
   )
 }
 
-const Wrapper = styled.li`
+const Wrapper = styled.div`
   width: 100%;
   max-width: 1000px;
   display: flex;
